@@ -9,11 +9,11 @@ const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelet
         <thead className="justify-between">
           <tr className="bg-gray-800">
             {columns.map((col, index) => (
-              <th key={index} className="px-16 py-2">
+              <th key={index} className="px-4 py-2 text-left">
                 <span className="text-gray-300">{col}</span>
               </th>
             ))}
-            <th className="px-16 py-2">
+            <th className="px-4 py-2 text-left">
               <span className="text-gray-300">Acciones</span>
             </th>
           </tr>
@@ -22,11 +22,11 @@ const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelet
           {data.map((row, rowIndex) => (
             <tr key={rowIndex} className="bg-white border-4 border-gray-200">
               {columns.map((col, colIndex) => (
-                <td key={colIndex} className="px-16 py-2">
+                <td key={colIndex} className="px-4 py-2 text-left">
                   <span>{row[col]}</span>
                 </td>
               ))}
-              <td className="px-16 py-2 flex gap-2">
+              <td className="px-4 py-2 flex gap-2">
                 <Button variant="editar" onClick={() => onEdit(row)}>
                   Editar
                 </Button>
