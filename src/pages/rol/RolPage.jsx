@@ -1,7 +1,7 @@
 // src/pages/rol/RolPage.jsx
 import React, { useState, useEffect } from 'react';
-import RolList from './rolList.jsx';
-import RolForm from './rolForm.jsx';
+import RolList from './RolList.jsx';
+import RolForm from './RolForm.jsx';
 import { fetchAllRoles, createRol, updateRol, deleteRol, fetchRolById } from '../../api/rolApi.jsx';
 
 const RolPage = () => {
