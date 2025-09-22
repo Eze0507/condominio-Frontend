@@ -1,7 +1,7 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginForm from "./loginForm";
+import LoginForm from "./LoginForm";
 import { useAuth } from "../../hooks/useAuth";
 
 const LoginPage = () => {
