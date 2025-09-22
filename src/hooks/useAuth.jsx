@@ -28,7 +28,7 @@ export function useAuth() {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const baseUrl = apiUrl && apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
-      const response = await axios.post(`${baseUrl}administracion/login/`, {
+      const response = await axios.post(`${baseUrl}login/`, {
         username,
         password,
       });

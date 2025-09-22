@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/residencial/',
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 apiClient.interceptors.request.use(
@@ -17,7 +17,7 @@ apiClient.interceptors.request.use(
 
 export const fetchAllVehiculos = async () => {
   try {
-    const response = await apiClient.get('/vehiculos/');
+    const response = await apiClient.get('vehiculos/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los vehículos.');
@@ -26,7 +26,7 @@ export const fetchAllVehiculos = async () => {
 
 export const fetchVehiculoById = async (vehiculoId) => {
   try {
-    const response = await apiClient.get(`/vehiculos/${vehiculoId}/`);
+    const response = await apiClient.get(`vehiculos/${vehiculoId}/`);
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener el vehículo.');
@@ -35,7 +35,7 @@ export const fetchVehiculoById = async (vehiculoId) => {
 
 export const createVehiculo = async (vehiculoData) => {
   try {
-    const response = await apiClient.post('/vehiculos/', vehiculoData);
+    const response = await apiClient.post('vehiculos/', vehiculoData);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -47,7 +47,7 @@ export const createVehiculo = async (vehiculoData) => {
 
 export const updateVehiculo = async (vehiculoId, vehiculoData) => {
   try {
-    const response = await apiClient.put(`/vehiculos/${vehiculoId}/`, vehiculoData);
+    const response = await apiClient.put(`vehiculos/${vehiculoId}/`, vehiculoData);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -59,7 +59,7 @@ export const updateVehiculo = async (vehiculoId, vehiculoData) => {
 
 export const deleteVehiculo = async (vehiculoId) => {
   try {
-    await apiClient.delete(`/vehiculos/${vehiculoId}/`);
+    await apiClient.delete(`vehiculos/${vehiculoId}/`);
   } catch (error) {
     throw new Error('Error al eliminar el vehículo.');
   }

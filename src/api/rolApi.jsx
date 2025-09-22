@@ -21,7 +21,7 @@ apiClient.interceptors.request.use(
 // Obtener todos los roles (solo id y name - usa RolListSerializer)
 export const fetchAllRoles = async () => {
   try {
-    const response = await apiClient.get('administracion/roles/');
+    const response = await apiClient.get('roles/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los roles.');
@@ -31,7 +31,7 @@ export const fetchAllRoles = async () => {
 // Obtener un rol con sus permisos (usa RolSerializer)
 export const fetchRolById = async (rolId) => {
   try {
-    const response = await apiClient.get(`administracion/roles/${rolId}/`);
+    const response = await apiClient.get(`roles/${rolId}/`);
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener el rol.');
@@ -42,7 +42,7 @@ export const fetchRolById = async (rolId) => {
 export const createRol = async (rolData) => {
   try {
     // rolData debe tener: { name: "nombre", permission_ids: [1, 2, 3] }
-    const response = await apiClient.post('administracion/roles/', rolData);
+    const response = await apiClient.post('roles/', rolData);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -55,7 +55,7 @@ export const createRol = async (rolData) => {
 // Actualizar un rol
 export const updateRol = async (rolId, rolData) => {
   try {
-    const response = await apiClient.put(`administracion/roles/${rolId}/`, rolData);
+    const response = await apiClient.put(`roles/${rolId}/`, rolData);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -68,7 +68,7 @@ export const updateRol = async (rolId, rolData) => {
 // Eliminar un rol
 export const deleteRol = async (rolId) => {
   try {
-    await apiClient.delete(`administracion/roles/${rolId}/`);
+    await apiClient.delete(`roles/${rolId}/`);
   } catch (error) {
     throw new Error('Error al eliminar el rol.');
   }
@@ -77,7 +77,7 @@ export const deleteRol = async (rolId) => {
 // Obtener todos los permisos
 export const fetchAllPermissions = async () => {
   try {
-    const response = await apiClient.get('administracion/permissions/');
+    const response = await apiClient.get('permissions/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los permisos.');

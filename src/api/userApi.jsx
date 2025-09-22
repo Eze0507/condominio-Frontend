@@ -20,7 +20,7 @@ apiClient.interceptors.request.use(
 
 export const fetchAllUsers = async () => {
   try {
-    const response = await apiClient.get('administracion/users/');
+    const response = await apiClient.get('users/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los usuarios.');
@@ -29,7 +29,7 @@ export const fetchAllUsers = async () => {
 
 export const fetchAllRoles = async () => {
   try {
-    const response = await apiClient.get('administracion/groupsAux/');
+    const response = await apiClient.get('groupsAux/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los roles.');
@@ -38,7 +38,7 @@ export const fetchAllRoles = async () => {
 
 export const createUser = async (userData) => {
   try {
-    const response = await apiClient.post('administracion/users/', userData);
+    const response = await apiClient.post('users/', userData);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -50,7 +50,7 @@ export const createUser = async (userData) => {
 
 export const updateUser = async (userId, userData) => {
   try {
-    const response = await apiClient.put(`administracion/users/${userId}/`, userData);
+    const response = await apiClient.put(`users/${userId}/`, userData);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -62,7 +62,7 @@ export const updateUser = async (userId, userData) => {
 
 export const deleteUser = async (userId) => {
   try {
-    await apiClient.delete(`administracion/users/${userId}/`);
+    await apiClient.delete(`users/${userId}/`);
   } catch (error) {
     throw new Error('Error al eliminar el usuario.');
   }

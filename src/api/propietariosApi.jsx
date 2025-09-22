@@ -19,7 +19,7 @@ apiClient.interceptors.request.use(
 
 export const fetchAllPropietarios = async () => {
   try {
-    const response = await apiClient.get('residencial/propietarios/');
+    const response = await apiClient.get('propietarios/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los propietarios.');
@@ -66,7 +66,7 @@ export const createPropietario = async (propietarioData) => {
         console.log(key, value);
       }
 
-      const response = await apiClient.post('residencial/propietarios/', formData, {
+      const response = await apiClient.post('propietarios/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -75,7 +75,7 @@ export const createPropietario = async (propietarioData) => {
     } else {
       // Usar JSON para datos sin archivos
       console.log('Enviando como JSON:', dataToSend);
-      const response = await apiClient.post('residencial/propietarios/', dataToSend);
+      const response = await apiClient.post('propietarios/', dataToSend);
       return response.data;
     }
   } catch (error) {
@@ -116,7 +116,7 @@ export const updatePropietario = async (propietarioId, propietarioData) => {
       }
     });
 
-    const response = await apiClient.put(`residencial/propietarios/${propietarioId}/`, formData, {
+    const response = await apiClient.put(`propietarios/${propietarioId}/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -132,7 +132,7 @@ export const updatePropietario = async (propietarioId, propietarioData) => {
 
 export const deletePropietario = async (propietarioId) => {
   try {
-    await apiClient.delete(`residencial/propietarios/${propietarioId}/`);
+    await apiClient.delete(`propietarios/${propietarioId}/`);
   } catch (error) {
     throw new Error('Error al eliminar el propietario.');
   }

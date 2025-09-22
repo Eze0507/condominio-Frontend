@@ -19,7 +19,7 @@ apiClient.interceptors.request.use(
 
 export const fetchAllEmpleados = async () => {
   try {
-    const response = await apiClient.get('administracion/empleados/');
+    const response = await apiClient.get('empleados/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los empleados.');
@@ -28,7 +28,7 @@ export const fetchAllEmpleados = async () => {
 
 export const fetchAllCargos = async () => {
   try {
-    const response = await apiClient.get('administracion/cargos/');
+    const response = await apiClient.get('cargos/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los cargos.');
@@ -70,7 +70,7 @@ export const createEmpleado = async (empleadoData) => {
         console.log(key, value);
       }
 
-      const response = await apiClient.post('administracion/empleados/', formData, {
+      const response = await apiClient.post('empleados/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -79,7 +79,7 @@ export const createEmpleado = async (empleadoData) => {
     } else {
       // Usar JSON para datos sin archivos
       console.log('Enviando como JSON:', empleadoData);
-      const response = await apiClient.post('administracion/empleados/', empleadoData);
+      const response = await apiClient.post('empleados/', empleadoData);
       return response.data;
     }
   } catch (error) {
@@ -114,7 +114,7 @@ export const updateEmpleado = async (empleadoId, empleadoData) => {
       }
     });
 
-    const response = await apiClient.put(`administracion/empleados/${empleadoId}/`, formData, {
+    const response = await apiClient.put(`empleados/${empleadoId}/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -130,7 +130,7 @@ export const updateEmpleado = async (empleadoId, empleadoData) => {
 
 export const deleteEmpleado = async (empleadoId) => {
   try {
-    await apiClient.delete(`administracion/empleados/${empleadoId}/`);
+    await apiClient.delete(`empleados/${empleadoId}/`);
   } catch (error) {
     throw new Error('Error al eliminar el empleado.');
   }
@@ -138,7 +138,7 @@ export const deleteEmpleado = async (empleadoId) => {
 
 export const getEmpleadoStats = async () => {
   try {
-    const response = await apiClient.get('administracion/empleados/stats/');
+    const response = await apiClient.get('empleados/stats/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener las estadísticas de empleados.');
