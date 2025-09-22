@@ -32,7 +32,7 @@ export function useAuth() {
         password,
       }, 
       {
-        withCredentials: true // <--- ¡Esta línea es crucial para que funcione!
+        withCredentials: false // <--- ¡Esta línea es crucial para que funcione!
       }
     );
       const { access, refresh } = response.data;
