@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Creamos una instancia de Axios que se usará para todas las llamadas a la API.
 const apiClient = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/residencial/',
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 // Interceptor para añadir el token de autenticación a cada solicitud.
@@ -19,7 +19,7 @@ apiClient.interceptors.request.use(
 
 export const fetchAllPropietarios = async () => {
   try {
-    const response = await apiClient.get('/propietarios/');
+    const response = await apiClient.get('residencial/propietarios/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los propietarios.');
@@ -66,7 +66,7 @@ export const createPropietario = async (propietarioData) => {
         console.log(key, value);
       }
 
-      const response = await apiClient.post('/propietarios/', formData, {
+      const response = await apiClient.post('residencial/propietarios/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -75,7 +75,7 @@ export const createPropietario = async (propietarioData) => {
     } else {
       // Usar JSON para datos sin archivos
       console.log('Enviando como JSON:', dataToSend);
-      const response = await apiClient.post('/propietarios/', dataToSend);
+      const response = await apiClient.post('residencial/propietarios/', dataToSend);
       return response.data;
     }
   } catch (error) {
@@ -116,7 +116,7 @@ export const updatePropietario = async (propietarioId, propietarioData) => {
       }
     });
 
-    const response = await apiClient.put(`/propietarios/${propietarioId}/`, formData, {
+    const response = await apiClient.put(`residencial/propietarios/${propietarioId}/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -132,7 +132,7 @@ export const updatePropietario = async (propietarioId, propietarioData) => {
 
 export const deletePropietario = async (propietarioId) => {
   try {
-    await apiClient.delete(`/propietarios/${propietarioId}/`);
+    await apiClient.delete(`residencial/propietarios/${propietarioId}/`);
   } catch (error) {
     throw new Error('Error al eliminar el propietario.');
   }
