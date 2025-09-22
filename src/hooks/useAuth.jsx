@@ -30,7 +30,11 @@ export function useAuth() {
       const response = await axios.post(`${apiUrl}administracion/login/`, {
         username,
         password,
-      });
+      }, 
+      {
+        withCredentials: true // <--- ¡Esta línea es crucial para que funcione!
+      }
+    );
       const { access, refresh } = response.data;
 
       localStorage.setItem("access", access);
