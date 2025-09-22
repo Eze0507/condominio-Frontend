@@ -5,6 +5,10 @@ import Layout from "../components/Layout.jsx";
 import Dashboard from "../pages/dashboard/dashboard.jsx";
 import Usuarios from "../pages/usuario/UserPage.jsx";
 import Roles from "../pages/rol/RolPage.jsx";
+import Empleados from "../pages/empleados/EmpleadoPage.jsx";
+import Cargos from "../pages/cargos/CargoPage.jsx";
+import Propietarios from "../pages/propietarios/PropietarioPage.jsx";
+
 
 // Componente para proteger rutas
 const ProtectedRoute = () => {
@@ -24,8 +28,9 @@ const AppRouter = () => {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="usuarios" element={<Usuarios />} />
           <Route path="roles" element={<Roles />} />
-          {/* Aquí puedes añadir más rutas del panel, por ejemplo: */}
-          {/* <Route path="usuarios" element={<Usuarios />} /> */}
+          <Route path="empleados" element={<Empleados />} />
+          <Route path="cargos" element={<Cargos />} />
+          <Route path="propietarios" element={<Propietarios />} />
         </Route>
 
         {/* Redirección por defecto */}

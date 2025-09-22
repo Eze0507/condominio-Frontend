@@ -4,35 +4,47 @@ import Button from "./button"; // tu componente de botones
 
 const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelete }) => {
   return (
-    <div>
-      <table className="min-w-full table-auto">
-        <thead className="justify-between">
+    <div className="overflow-x-auto">
+      <table className="min-w-full table-auto border-collapse">
+        <thead>
           <tr className="bg-gray-800">
             {columns.map((col, index) => (
-              <th key={index} className="px-4 py-2 text-left">
-                <span className="text-gray-300">{col}</span>
+              <th key={index} className="px-3 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {col}
               </th>
             ))}
-            <th className="px-4 py-2 text-left">
-              <span className="text-gray-300">Acciones</span>
+            <th className="px-3 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+              Acciones
             </th>
           </tr>
         </thead>
-        <tbody className="bg-gray-200">
+        <tbody className="bg-white divide-y divide-gray-200">
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="bg-white border-4 border-gray-200">
+            <tr key={rowIndex} className="hover:bg-gray-50">
               {columns.map((col, colIndex) => (
-                <td key={colIndex} className="px-4 py-2 text-left">
-                  <span>{row[col]}</span>
+                <td key={colIndex} className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <div className="max-w-xs truncate" title={row[col]}>
+                    {row[col]}
+                  </div>
                 </td>
               ))}
-              <td className="px-4 py-2 flex gap-2">
-                <Button variant="editar" onClick={() => onEdit(row)}>
-                  Editar
-                </Button>
-                <Button variant="cancelar" onClick={() => onDelete(row.id)}>
-                  Eliminar
-                </Button>
+              <td className="px-3 py-4 whitespace-nowrap text-sm font-medium">
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="editar" 
+                    onClick={() => onEdit(row)}
+                    className="text-xs px-2 py-1"
+                  >
+                    Editar
+                  </Button>
+                  <Button 
+                    variant="cancelar" 
+                    onClick={() => onDelete(row.id)}
+                    className="text-xs px-2 py-1"
+                  >
+                    Eliminar
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}
