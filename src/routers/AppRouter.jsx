@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
-import LoginPage from "../pages/login/loginPage.jsx";
+import LoginPage from "../pages/login/LoginPage.jsx";
 import Layout from "../components/Layout.jsx";
 import Dashboard from "../pages/dashboard/dashboard.jsx";
 import Usuarios from "../pages/usuario/UserPage.jsx";
