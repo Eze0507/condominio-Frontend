@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Creamos una instancia de Axios que se usará para todas las llamadas a la API.
 const apiClient = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/administracion/',
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 // Interceptor para añadir el token de autenticación a cada solicitud.
@@ -19,7 +19,7 @@ apiClient.interceptors.request.use(
 
 export const fetchAllCargos = async () => {
   try {
-    const response = await apiClient.get('/cargos/');
+    const response = await apiClient.get('/administracion/cargos/');
     return response.data;
   } catch (error) {
     throw new Error('Error al obtener los cargos.');
@@ -39,7 +39,7 @@ export const createCargo = async (cargoData) => {
     };
 
     console.log('Enviando como JSON:', cleanedData);
-    const response = await apiClient.post('/cargos/', cleanedData);
+    const response = await apiClient.post('/administracion/cargos/', cleanedData);
     return response.data;
   } catch (error) {
     console.error('Error completo:', error);
@@ -65,7 +65,7 @@ export const updateCargo = async (cargoId, cargoData) => {
     };
 
     console.log('Enviando como JSON:', cleanedData);
-    const response = await apiClient.put(`/cargos/${cargoId}/`, cleanedData);
+    const response = await apiClient.put(`/administracion/cargos/${cargoId}/`, cleanedData);
     return response.data;
   } catch (error) {
     console.error('Error completo:', error);
@@ -80,7 +80,7 @@ export const updateCargo = async (cargoId, cargoData) => {
 
 export const deleteCargo = async (cargoId) => {
   try {
-    await apiClient.delete(`/cargos/${cargoId}/`);
+    await apiClient.delete(`/administracion/cargos/${cargoId}/`);
   } catch (error) {
     throw new Error('Error al eliminar el cargo.');
   }

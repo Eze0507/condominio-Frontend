@@ -26,7 +26,8 @@ export function useAuth() {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/administracion/login/", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${apiUrl}administracion/login/`, {
         username,
         password,
       });
