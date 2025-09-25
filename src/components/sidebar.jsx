@@ -11,10 +11,9 @@ import {
   FaUserCircle,
   FaRobot,
   FaBuilding,
-} from "react-icons/fa"; // 👈 eliminé FaBars
+} from "react-icons/fa"; 
 import logo from "../assets/images/logo.jpg";
 
-// ❌ eliminé toggleSidebar porque ya no se usa
 const Sidebar = ({ sidebarOpen }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
@@ -25,6 +24,12 @@ const Sidebar = ({ sidebarOpen }) => {
   const toggleMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu);
   };
+
+  React.useEffect(() => {
+    if (!sidebarOpen) {
+      setOpenMenu(null);
+    }
+  }, [sidebarOpen]);
 
   const handleLogout = () => {
     localStorage.removeItem("access");
@@ -85,7 +90,7 @@ const Sidebar = ({ sidebarOpen }) => {
     },
     {
       title: "Seguridad IA",
-      icon: <FaRobot />,
+      icon: <FaRobot className="w-5 h-5" />,
       key: "seguridad-ia",
       subItems: [
         { name: "Reconocimiento facial", path: "/admin/reconocimiento-facial" },
@@ -113,16 +118,23 @@ const Sidebar = ({ sidebarOpen }) => {
 
   return (
     <aside
-      className={`bg-white w-64 flex-shrink-0 h-screen flex flex-col border-r transition-transform duration-300 ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      className={`bg-white h-screen flex flex-col border-r transition-all duration-500 ease-in-out ${
+        sidebarOpen 
+          ? "w-64 flex-shrink-0" 
+          : "w-0 overflow-hidden"
       }`}
     >
-      {/* 🔹 Logo centrado sin botón */}
       <div className="h-16 flex items-center justify-center px-4 border-b">
-        <img src={logo} alt="logo" className="h-12 w-auto" />
+        <Link to="/" className="flex items-center">
+          <img src={logo} alt="logo" className={`h-12 w-auto transition-opacity duration-500 ease-in-out ${
+            sidebarOpen ? "opacity-100 delay-100" : "opacity-0 delay-0"
+          }`} />
+        </Link>
       </div>
 
-      <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+      <nav className={`flex-1 overflow-y-auto p-4 space-y-2 transition-opacity duration-500 ease-in-out ${
+        sidebarOpen ? "opacity-100 delay-100" : "opacity-0 delay-0"
+      }`} style={{ minWidth: sidebarOpen ? '256px' : '0px' }}>
         {menuItems.map((menu) => (
           <div key={menu.key}>
             {menu.subItems ? (
@@ -131,24 +143,24 @@ const Sidebar = ({ sidebarOpen }) => {
                   className="px-4 py-3 flex items-center justify-between space-x-4 rounded-lg text-gray-500 group cursor-pointer hover:bg-gray-100"
                   onClick={() => toggleMenu(menu.key)}
                 >
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-4 min-w-0">
                     {menu.icon}
-                    <span>{menu.title}</span>
+                    <span className="whitespace-nowrap overflow-hidden text-ellipsis">{menu.title}</span>
                   </div>
                   {openMenu === menu.key ? (
-                    <FaChevronDown className="text-xs" />
+                    <FaChevronDown className="text-xs flex-shrink-0" />
                   ) : (
-                    <FaChevronRight className="text-xs" />
+                    <FaChevronRight className="text-xs flex-shrink-0" />
                   )}
                 </div>
                 {openMenu === menu.key && (
-                  <ul className="ml-4 mt-2 space-y-1">
+                  <ul className="ml-4 mt-2 space-y-1 transition-all duration-300 ease-in-out">
                     {menu.subItems.map((sub, idx) => (
                       <li key={idx}>
                         <NavLink
                           to={sub.path}
                           className={({ isActive }) =>
-                            `block p-2 rounded-md ${
+                            `block p-2 rounded-md transition-colors duration-200 ${
                               isActive
                                 ? "text-sky-600 bg-gray-100"
                                 : "text-gray-500 hover:bg-gray-100"
@@ -171,22 +183,24 @@ const Sidebar = ({ sidebarOpen }) => {
         ))}
       </nav>
 
-      <div className="p-4 border-t">
-        <div className="flex items-center mb-4">
-          <FaUserCircle className="text-2xl text-gray-500 mr-3" />
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold text-gray-800 truncate">
+      <div className={`p-4 border-t transition-opacity duration-500 ease-in-out ${
+        sidebarOpen ? "opacity-100 delay-100" : "opacity-0 delay-0"
+      }`}>
+        <div className="flex items-center mb-4 min-w-0">
+          <FaUserCircle className="text-2xl text-gray-500 mr-3 flex-shrink-0" />
+          <div className="flex flex-col min-w-0 flex-1">
+            <span className="text-sm font-semibold text-gray-800 truncate whitespace-nowrap">
               {username}
             </span>
-            <span className="text-xs text-gray-400 capitalize">{userRole}</span>
+            <span className="text-xs text-gray-400 capitalize truncate whitespace-nowrap">{userRole}</span>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group w-full hover:bg-gray-100"
+          className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group w-full hover:bg-gray-100 min-w-0"
         >
-          <FaSignOutAlt />
-          <span>Cerrar Sesión</span>
+          <FaSignOutAlt className="flex-shrink-0" />
+          <span className="whitespace-nowrap overflow-hidden text-ellipsis">Cerrar Sesión</span>
         </button>
       </div>
     </aside>

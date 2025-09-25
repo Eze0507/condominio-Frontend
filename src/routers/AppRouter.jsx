@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/login/LoginPage.jsx";
 import Layout from "../components/Layout.jsx";
 import Dashboard from "../pages/dashboard/dashboard.jsx";
@@ -20,6 +21,9 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Ruta pública para la homepage */}
+        <Route path="/" element={<HomePage />} />
+        
         {/* Ruta pública para el login */}
         <Route path="/login" element={<LoginPage />} />
 
@@ -36,7 +40,7 @@ const AppRouter = () => {
         {/* Redirección por defecto */}
         <Route 
           path="*" 
-          element={<Navigate to={localStorage.getItem("access") ? "/admin/dashboard" : "/login"} replace />}
+          element={<Navigate to={localStorage.getItem("access") ? "/admin/dashboard" : "/"} replace />}
         />
       </Routes>
     </BrowserRouter>
