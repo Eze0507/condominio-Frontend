@@ -6,7 +6,6 @@ import Button from "../../components/button";
 const CargoForm = ({ onSubmit, onCancel, initialData, loading }) => {
   const [formData, setFormData] = useState({
     nombre: "",
-    descripcion: "",
     salario_base: "",
     estado: true,
   });
@@ -15,7 +14,6 @@ const CargoForm = ({ onSubmit, onCancel, initialData, loading }) => {
     if (initialData) {
       setFormData({
         nombre: initialData.nombre || "",
-        descripcion: initialData.descripcion || "",
         salario_base: initialData.salario_base || "",
         estado: initialData.estado !== undefined ? initialData.estado : true,
       });
@@ -102,30 +100,6 @@ const CargoForm = ({ onSubmit, onCancel, initialData, loading }) => {
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Los cargos inactivos no aparecerán en las opciones de empleados
-            </p>
-          </div>
-        </div>
-
-        {/* Descripción */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-800 mb-4">Descripción</h3>
-          
-          {/* Descripción */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="descripcion">
-              Descripción del Cargo
-            </label>
-            <textarea
-              id="descripcion"
-              name="descripcion"
-              value={formData.descripcion}
-              onChange={handleChange}
-              rows="8"
-              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Describe las responsabilidades y funciones de este cargo..."
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Describe las responsabilidades, funciones y requisitos del cargo
             </p>
           </div>
         </div>

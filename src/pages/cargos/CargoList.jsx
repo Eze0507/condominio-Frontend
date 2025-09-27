@@ -14,17 +14,15 @@ const CargoList = ({ cargos, onEdit, onDelete, onAddNew }) => {
       (cargo) =>
         cargo && 
         cargo.nombre && 
-        (cargo.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (cargo.descripcion && cargo.descripcion.toLowerCase().includes(searchTerm.toLowerCase())))
+        cargo.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [searchTerm, cargos]);
 
-  const columns = ["Nombre", "Salario Base", "Estado", "Fecha Creación"];
+  const columns = ["Nombre", "Salario Base", "Estado"];
   const tableData = filteredCargos.map((cargo) => ({
     "Nombre": cargo?.nombre || '',
     "Salario Base": cargo?.salario_base ? `$${parseFloat(cargo.salario_base).toLocaleString()}` : '$0.00',
     "Estado": cargo?.estado ? 'Activo' : 'Inactivo',
-    "Fecha Creación": cargo?.fecha_creacion ? new Date(cargo.fecha_creacion).toLocaleDateString() : '',
     id: cargo?.id || '',
   }));
 

@@ -9,6 +9,11 @@ import Roles from "../pages/rol/RolPage.jsx";
 import Empleados from "../pages/empleados/EmpleadoPage.jsx";
 import Cargos from "../pages/cargos/CargoPage.jsx";
 import Propietarios from "../pages/propietarios/PropietarioPage.jsx";
+import Inquilinos from "../pages/inquilinos/InquilinoPage.jsx";
+import Familiares from "../pages/familiares/FamiliarPage.jsx";
+import Visitantes from "../pages/visitantes/VisitantePage.jsx";
+import Mascotas from "../pages/mascotas/MascotaPage.jsx";
+import Visitas from "../pages/visitas/VisitaPage.jsx";
 
 
 // Componente para proteger rutas
@@ -35,6 +40,11 @@ const AppRouter = () => {
           <Route path="empleados" element={<Empleados />} />
           <Route path="cargos" element={<Cargos />} />
           <Route path="propietarios" element={<Propietarios />} />
+          <Route path="inquilinos" element={<Inquilinos />} />
+          <Route path="familiares" element={<Familiares />} />
+          <Route path="visitantes" element={<Visitantes />} />
+          <Route path="mascotas" element={<Mascotas />} />
+          <Route path="visitas" element={<Visitas />} />
         </Route>
 
         {/* Redirección por defecto */}

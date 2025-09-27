@@ -17,33 +17,44 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export const fetchAllPropietarios = async () => {
+// ==================== CRUD MASCOTAS ====================
+
+export const fetchAllMascotas = async () => {
   try {
-    const response = await apiClient.get('propietarios/');
+    const response = await apiClient.get('mascotas/');
     return response.data;
   } catch (error) {
-    throw new Error('Error al obtener los propietarios.');
+    throw new Error('Error al obtener las mascotas.');
   }
 };
 
-export const createPropietario = async (propietarioData) => {
+export const fetchMascotaById = async (id) => {
   try {
-    console.log('Datos recibidos para crear propietario:', propietarioData);
+    const response = await apiClient.get(`mascotas/${id}/`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error al obtener la mascota.');
+  }
+};
+
+export const createMascota = async (mascotaData) => {
+  try {
+    console.log('Datos recibidos para crear mascota:', mascotaData);
     
-    // Estructura simplificada para Persona (tipo 'P' se asigna automáticamente)
+    // Estructura simplificada para Mascota
     const dataToSend = {
-      nombre: propietarioData.nombre || '',
-      apellido: propietarioData.apellido || '',
-      telefono: propietarioData.telefono || '',
-      imagen: propietarioData.imagen || null,
-      sexo: propietarioData.sexo || '',
-      CI: propietarioData.CI || '',
-      fecha_nacimiento: propietarioData.fecha_nacimiento || '',
-      estado: propietarioData.estado || 'A'
+      nombre: mascotaData.nombre || '',
+      especie: mascotaData.especie || 'PERRO',
+      tipo: mascotaData.tipo || 'MACHO',
+      foto: mascotaData.foto || null,
+      raza: mascotaData.raza || '',
+      fecha_nacimiento: mascotaData.fecha_nacimiento || '',
+      observaciones: mascotaData.observaciones || '',
+      persona: mascotaData.persona || ''
     };
     
     // Si hay archivo, usar FormData, si no, usar JSON
-    const hasFile = dataToSend.imagen;
+    const hasFile = dataToSend.foto;
     
     if (hasFile) {
       // Crear FormData para manejar archivos
@@ -63,7 +74,7 @@ export const createPropietario = async (propietarioData) => {
         console.log(key, value);
       }
 
-      const response = await apiClient.post('propietarios/', formData, {
+      const response = await apiClient.post('mascotas/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -72,7 +83,7 @@ export const createPropietario = async (propietarioData) => {
     } else {
       // Usar JSON para datos sin archivos
       console.log('Enviando como JSON:', dataToSend);
-      const response = await apiClient.post('propietarios/', dataToSend);
+      const response = await apiClient.post('mascotas/', dataToSend);
       return response.data;
     }
   } catch (error) {
@@ -82,26 +93,26 @@ export const createPropietario = async (propietarioData) => {
       console.error('Error status:', error.response.status);
       throw new Error(JSON.stringify(error.response.data));
     }
-    throw new Error('Error de conexión al registrar el propietario.');
+    throw new Error('Error de conexión al registrar la mascota.');
   }
 };
 
-export const updatePropietario = async (propietarioId, propietarioData) => {
+export const updateMascota = async (mascotaId, mascotaData) => {
   try {
-    // Estructura simplificada para Persona (tipo 'P' se mantiene automáticamente)
+    // Estructura simplificada para Mascota
     const dataToSend = {
-      nombre: propietarioData.nombre || '',
-      apellido: propietarioData.apellido || '',
-      telefono: propietarioData.telefono || '',
-      imagen: propietarioData.imagen || null,
-      sexo: propietarioData.sexo || '',
-      CI: propietarioData.CI || '',
-      fecha_nacimiento: propietarioData.fecha_nacimiento || '',
-      estado: propietarioData.estado || 'A'
+      nombre: mascotaData.nombre || '',
+      especie: mascotaData.especie || 'PERRO',
+      tipo: mascotaData.tipo || 'MACHO',
+      foto: mascotaData.foto || null,
+      raza: mascotaData.raza || '',
+      fecha_nacimiento: mascotaData.fecha_nacimiento || '',
+      observaciones: mascotaData.observaciones || '',
+      persona: mascotaData.persona || ''
     };
     
     // Si hay archivo, usar FormData, si no, usar JSON
-    const hasFile = dataToSend.imagen;
+    const hasFile = dataToSend.foto;
     
     if (hasFile) {
       // Crear FormData para manejar archivos
@@ -114,7 +125,7 @@ export const updatePropietario = async (propietarioId, propietarioData) => {
         }
       });
 
-      const response = await apiClient.put(`propietarios/${propietarioId}/`, formData, {
+      const response = await apiClient.put(`mascotas/${mascotaId}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -122,21 +133,32 @@ export const updatePropietario = async (propietarioId, propietarioData) => {
       return response.data;
     } else {
       // Usar JSON para datos sin archivos
-      const response = await apiClient.put(`propietarios/${propietarioId}/`, dataToSend);
+      const response = await apiClient.put(`mascotas/${mascotaId}/`, dataToSend);
       return response.data;
     }
   } catch (error) {
     if (error.response) {
       throw new Error(JSON.stringify(error.response.data));
     }
-    throw new Error('Error de conexión al actualizar el propietario.');
+    throw new Error('Error de conexión al actualizar la mascota.');
   }
 };
 
-export const deletePropietario = async (propietarioId) => {
+export const deleteMascota = async (mascotaId) => {
   try {
-    await apiClient.delete(`propietarios/${propietarioId}/`);
+    await apiClient.delete(`mascotas/${mascotaId}/`);
   } catch (error) {
-    throw new Error('Error al eliminar el propietario.');
+    throw new Error('Error al eliminar la mascota.');
+  }
+};
+
+// ==================== FUNCIONES AUXILIARES ====================
+
+export const fetchAllPersonas = async () => {
+  try {
+    const response = await apiClient.get('personas/');
+    return response.data;
+  } catch (error) {
+    throw new Error('Error al obtener las personas.');
   }
 };

@@ -27,11 +27,11 @@ const EmpleadoList = ({ empleados, onEdit, onDelete, onAddNew }) => {
     "Nombre": empleado?.nombre_completo || '',
     "Cargo": empleado?.cargo_nombre || '',
     "Sueldo": empleado?.sueldo ? `$${parseFloat(empleado.sueldo).toLocaleString()}` : '',
-    "Ingreso": empleado?.fecha_ingreso || '',
-    "Estado": empleado?.estado_empleado === 'A' ? 'Activo' : 
-             empleado?.estado_empleado === 'I' ? 'Inactivo' : 
-             empleado?.estado_empleado === 'V' ? 'Vacaciones' :
-             empleado?.estado_empleado === 'S' ? 'Suspendido' : empleado?.estado_empleado || '',
+    "Ingreso": empleado?.fecha_registro ? 
+      new Date(empleado.fecha_registro).toLocaleDateString('es-ES') : '',
+    "Estado": empleado?.estado === 'A' ? 'Activo' : 
+             empleado?.estado === 'I' ? 'Inactivo' : 
+             empleado?.estado === 'S' ? 'Suspendido' : empleado?.estado || '',
     id: empleado?.id || '',
   }));
 
@@ -60,7 +60,12 @@ const EmpleadoList = ({ empleados, onEdit, onDelete, onAddNew }) => {
           title="Empleados"
           columns={columns}
           data={tableData}
-          onEdit={(empleado) => onEdit(empleado)}
+          onEdit={(rowData) => {
+            // Buscar el empleado original en la lista filtrada
+            const empleadoOriginal = filteredEmpleados.find(emp => emp.id === rowData.id);
+            console.log('Empleado original encontrado:', empleadoOriginal);
+            onEdit(empleadoOriginal);
+          }}
           onDelete={onDelete}
         />
       </div>

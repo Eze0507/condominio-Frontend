@@ -27,6 +27,7 @@ const PropietarioPage = () => {
   }, []);
 
   const handleEdit = (propietario) => {
+    console.log('Propietario seleccionado para editar:', propietario);
     setEditingPropietario(propietario);
     setShowForm(true);
   };
@@ -43,18 +44,19 @@ const PropietarioPage = () => {
 
   const handleFormSubmit = async (formData) => {
     try {
-      // Preparar los datos para el backend
+      // Preparar los datos para el backend (estructura simplificada)
       const cleanedData = {
-        persona: {
-          ...formData.persona
-        },
-        estado_propietario: formData.estado_propietario,
-        observaciones: formData.observaciones || '',
+        ...formData
       };
 
-      // Solo remover la foto si está vacía
-      if (cleanedData.persona.foto === null || cleanedData.persona.foto === undefined || !cleanedData.persona.foto) {
-        delete cleanedData.persona.foto;
+      // Solo remover la imagen si está vacía
+      if (cleanedData.imagen === null || cleanedData.imagen === undefined || !cleanedData.imagen) {
+        delete cleanedData.imagen;
+      }
+
+      // Si estamos editando y no hay nueva imagen, mantener la existente
+      if (editingPropietario && !formData.imagen && editingPropietario.imagen) {
+        cleanedData.imagen = editingPropietario.imagen;
       }
 
       if (editingPropietario) {

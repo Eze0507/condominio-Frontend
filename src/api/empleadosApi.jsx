@@ -40,25 +40,15 @@ export const createEmpleado = async (empleadoData) => {
     console.log('Datos recibidos para crear empleado:', empleadoData);
     
     // Si hay archivo, usar FormData, si no, usar JSON
-    const hasFile = empleadoData.persona && empleadoData.persona.foto;
+    const hasFile = empleadoData.imagen && empleadoData.imagen instanceof File;
     
     if (hasFile) {
       // Crear FormData para manejar archivos
       const formData = new FormData();
       
-      // Agregar datos de persona
-      if (empleadoData.persona) {
-        Object.keys(empleadoData.persona).forEach(key => {
-          if (empleadoData.persona[key] !== null && empleadoData.persona[key] !== undefined) {
-            formData.append(`persona[${key}]`, empleadoData.persona[key]);
-            console.log(`Agregando persona[${key}]:`, empleadoData.persona[key]);
-          }
-        });
-      }
-      
-      // Agregar otros campos del empleado
+      // Agregar todos los campos directamente (sin anidar en persona)
       Object.keys(empleadoData).forEach(key => {
-        if (key !== 'persona' && empleadoData[key] !== null && empleadoData[key] !== undefined) {
+        if (empleadoData[key] !== null && empleadoData[key] !== undefined) {
           formData.append(key, empleadoData[key]);
           console.log(`Agregando ${key}:`, empleadoData[key]);
         }
@@ -95,33 +85,40 @@ export const createEmpleado = async (empleadoData) => {
 
 export const updateEmpleado = async (empleadoId, empleadoData) => {
   try {
-    // Crear FormData para manejar archivos
-    const formData = new FormData();
+    console.log('Datos recibidos para actualizar empleado:', empleadoData);
     
-    // Agregar datos de persona
-    if (empleadoData.persona) {
-      Object.keys(empleadoData.persona).forEach(key => {
-        if (empleadoData.persona[key] !== null && empleadoData.persona[key] !== undefined) {
-          formData.append(`persona[${key}]`, empleadoData.persona[key]);
+    // Si hay archivo, usar FormData, si no, usar JSON
+    const hasFile = empleadoData.imagen && empleadoData.imagen instanceof File;
+    
+    if (hasFile) {
+      // Crear FormData para manejar archivos
+      const formData = new FormData();
+      
+      // Agregar todos los campos directamente
+      Object.keys(empleadoData).forEach(key => {
+        if (empleadoData[key] !== null && empleadoData[key] !== undefined) {
+          formData.append(key, empleadoData[key]);
+          console.log(`Agregando ${key}:`, empleadoData[key]);
         }
       });
-    }
-    
-    // Agregar otros campos del empleado
-    Object.keys(empleadoData).forEach(key => {
-      if (key !== 'persona' && empleadoData[key] !== null && empleadoData[key] !== undefined) {
-        formData.append(key, empleadoData[key]);
-      }
-    });
 
-    const response = await apiClient.put(`empleados/${empleadoId}/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data;
+      const response = await apiClient.put(`empleados/${empleadoId}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } else {
+      // Usar JSON para datos sin archivos
+      console.log('Enviando como JSON:', empleadoData);
+      const response = await apiClient.put(`empleados/${empleadoId}/`, empleadoData);
+      return response.data;
+    }
   } catch (error) {
+    console.error('Error completo:', error);
     if (error.response) {
+      console.error('Error response:', error.response.data);
+      console.error('Error status:', error.response.status);
       throw new Error(JSON.stringify(error.response.data));
     }
     throw new Error('Error de conexión al actualizar el empleado.');

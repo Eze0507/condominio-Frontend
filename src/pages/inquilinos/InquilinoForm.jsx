@@ -1,33 +1,47 @@
-// src/pages/propietarios/PropietarioForm.jsx
+// src/pages/inquilinos/InquilinoForm.jsx
 import React, { useState, useEffect } from "react";
 import StyledForm from "../../components/form";
 import Button from "../../components/button";
 
-const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
+const InquilinoForm = ({ onSubmit, onCancel, initialData, propietarios = [], loading }) => {
   const [formData, setFormData] = useState({
+    // Atributos heredados de Persona
     nombre: "",
     apellido: "",
     telefono: "",
-    imagen: null,
-    estado: "A",
-    sexo: "",
     CI: "",
     fecha_nacimiento: "",
+    sexo: "M",
+    imagen: null,
+    estado: "A",
+    // Atributos específicos de Inquilino
+    propietario: "",
+    fecha_inicio: "",
+    fecha_fin: "",
+    estado_inquilino: "A",
   });
 
   useEffect(() => {
     if (initialData) {
-      console.log('Datos iniciales recibidos en PropietarioForm:', initialData);
+      console.log('Datos iniciales recibidos en InquilinoForm:', initialData);
       setFormData({
+        // Atributos heredados de Persona
         nombre: initialData.nombre || "",
         apellido: initialData.apellido || "",
         telefono: initialData.telefono || "",
-        imagen: initialData.imagen || null,
-        estado: initialData.estado || "A",
-        sexo: initialData.sexo || "",
         CI: initialData.CI || "",
         fecha_nacimiento: initialData.fecha_nacimiento ? 
           initialData.fecha_nacimiento.split('T')[0] : "",
+        sexo: initialData.sexo || "M",
+        imagen: initialData.imagen || null,
+        estado: initialData.estado || "A",
+        // Atributos específicos de Inquilino
+        propietario: initialData.propietario || "",
+        fecha_inicio: initialData.fecha_inicio ? 
+          initialData.fecha_inicio.split('T')[0] : "",
+        fecha_fin: initialData.fecha_fin ? 
+          initialData.fecha_fin.split('T')[0] : "",
+        estado_inquilino: initialData.estado_inquilino || "A",
       });
     } else {
       // Resetear formulario cuando no hay datos iniciales
@@ -35,11 +49,15 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
         nombre: "",
         apellido: "",
         telefono: "",
-        imagen: null,
-        estado: "A",
-        sexo: "",
         CI: "",
         fecha_nacimiento: "",
+        sexo: "M",
+        imagen: null,
+        estado: "A",
+        propietario: "",
+        fecha_inicio: "",
+        fecha_fin: "",
+        estado_inquilino: "A",
       });
     }
   }, [initialData]);
@@ -47,10 +65,17 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     
-    setFormData({
-      ...formData,
-      [name]: type === 'file' ? files[0] : value
-    });
+    if (type === 'file') {
+      setFormData({
+        ...formData,
+        [name]: files[0] || null
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -61,8 +86,8 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
   const isEditing = !!initialData;
 
   return (
-    <StyledForm title={isEditing ? "Editar Propietario" : "Registrar Propietario"} onSubmit={handleSubmit}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <StyledForm title={isEditing ? "Editar Inquilino" : "Registrar Inquilino"} onSubmit={handleSubmit}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Información Personal */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-gray-800 mb-4">Información Personal</h3>
@@ -99,7 +124,7 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
             />
           </div>
 
-          {/* Cédula de Identidad */}
+          {/* CI */}
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="CI">
               Cédula de Identidad *
@@ -159,14 +184,33 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
               required
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="">Selecciona el sexo</option>
               <option value="M">Masculino</option>
               <option value="F">Femenino</option>
               <option value="O">Otro</option>
             </select>
           </div>
 
-          {/* Estado de Persona */}
+          {/* Imagen */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="imagen">
+              Imagen
+            </label>
+            <input
+              type="file"
+              id="imagen"
+              name="imagen"
+              accept="image/*"
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            {formData.imagen && typeof formData.imagen === 'string' && (
+              <div className="mt-2">
+                <img src={formData.imagen} alt="Imagen actual" className="w-20 h-20 object-cover rounded" />
+              </div>
+            )}
+          </div>
+
+          {/* Estado */}
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="estado">
               Estado
@@ -183,36 +227,87 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
               <option value="S">Suspendido</option>
             </select>
           </div>
+        </div>
 
-          {/* Foto */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="imagen">
-              Foto (Opcional)
+        {/* Información de Alquiler */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium text-gray-800 mb-4">Información de Alquiler</h3>
+
+          {/* Propietario */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="propietario">
+              Propietario *
+            </label>
+            <select
+              id="propietario"
+              name="propietario"
+              value={formData.propietario}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Selecciona un propietario</option>
+              {propietarios.map(propietario =>
+                propietario.id && propietario.nombre_completo ? (
+                  <option key={propietario.id} value={propietario.id}>
+                    {propietario.nombre_completo}
+                  </option>
+                ) : null
+              )}
+            </select>
+          </div>
+
+          {/* Fecha de Inicio */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fecha_inicio">
+              Fecha de Inicio
             </label>
             <input
-              type="file"
-              id="imagen"
-              name="imagen"
-              accept="image/*"
+              type="date"
+              id="fecha_inicio"
+              name="fecha_inicio"
+              value={formData.fecha_inicio}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          {/* Fecha de Fin */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fecha_fin">
+              Fecha de Fin (Opcional)
+            </label>
+            <input
+              type="date"
+              id="fecha_fin"
+              name="fecha_fin"
+              value={formData.fecha_fin}
               onChange={handleChange}
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <p className="text-xs text-gray-500 mt-1">
-              {isEditing ? 'Selecciona una nueva imagen para reemplazar la actual (opcional)' : 'Selecciona una imagen para el perfil del propietario (opcional)'}
+              Deja en blanco si el alquiler está activo
             </p>
-            {formData.imagen && typeof formData.imagen === 'string' && (
-              <div className="mt-2">
-                <p className="text-sm text-gray-600">Imagen actual:</p>
-                <img 
-                  src={formData.imagen} 
-                  alt="Imagen actual" 
-                  className="w-20 h-20 object-cover rounded border"
-                />
-              </div>
-            )}
+          </div>
+
+          {/* Estado del Inquilino */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="estado_inquilino">
+              Estado del Inquilino
+            </label>
+            <select
+              id="estado_inquilino"
+              name="estado_inquilino"
+              value={formData.estado_inquilino}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="A">Activo</option>
+              <option value="I">Inactivo</option>
+              <option value="F">Finalizado</option>
+            </select>
           </div>
         </div>
-
       </div>
 
       {/* Botones */}
@@ -230,4 +325,4 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
   );
 };
 
-export default PropietarioForm;
+export default InquilinoForm;

@@ -17,29 +17,43 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export const fetchAllPropietarios = async () => {
+export const fetchAllFamiliares = async () => {
   try {
-    const response = await apiClient.get('propietarios/');
+    const response = await apiClient.get('familiares/');
     return response.data;
   } catch (error) {
-    throw new Error('Error al obtener los propietarios.');
+    throw new Error('Error al obtener los familiares.');
   }
 };
 
-export const createPropietario = async (propietarioData) => {
+export const fetchAllPersonas = async () => {
   try {
-    console.log('Datos recibidos para crear propietario:', propietarioData);
+    const response = await apiClient.get('familiares/personas_disponibles/');
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener personas:', error);
+    throw new Error('Error al obtener las personas.');
+  }
+};
+
+export const createFamiliar = async (familiarData) => {
+  try {
+    console.log('Datos recibidos para crear familiar:', familiarData);
     
-    // Estructura simplificada para Persona (tipo 'P' se asigna automáticamente)
+    // Estructura para Familiares con herencia de Persona
     const dataToSend = {
-      nombre: propietarioData.nombre || '',
-      apellido: propietarioData.apellido || '',
-      telefono: propietarioData.telefono || '',
-      imagen: propietarioData.imagen || null,
-      sexo: propietarioData.sexo || '',
-      CI: propietarioData.CI || '',
-      fecha_nacimiento: propietarioData.fecha_nacimiento || '',
-      estado: propietarioData.estado || 'A'
+      // Atributos heredados de Persona
+      nombre: familiarData.nombre || '',
+      apellido: familiarData.apellido || '',
+      telefono: familiarData.telefono || '',
+      imagen: familiarData.imagen || null,
+      sexo: familiarData.sexo || 'M',
+      CI: familiarData.CI || '',
+      fecha_nacimiento: familiarData.fecha_nacimiento || '',
+      estado: familiarData.estado || 'A',
+      // Atributos específicos de Familiares
+      persona_relacionada: familiarData.persona_relacionada || '',
+      parentesco: familiarData.parentesco || ''
     };
     
     // Si hay archivo, usar FormData, si no, usar JSON
@@ -63,7 +77,7 @@ export const createPropietario = async (propietarioData) => {
         console.log(key, value);
       }
 
-      const response = await apiClient.post('propietarios/', formData, {
+      const response = await apiClient.post('familiares/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -72,7 +86,7 @@ export const createPropietario = async (propietarioData) => {
     } else {
       // Usar JSON para datos sin archivos
       console.log('Enviando como JSON:', dataToSend);
-      const response = await apiClient.post('propietarios/', dataToSend);
+      const response = await apiClient.post('familiares/', dataToSend);
       return response.data;
     }
   } catch (error) {
@@ -82,22 +96,26 @@ export const createPropietario = async (propietarioData) => {
       console.error('Error status:', error.response.status);
       throw new Error(JSON.stringify(error.response.data));
     }
-    throw new Error('Error de conexión al registrar el propietario.');
+    throw new Error('Error de conexión al registrar el familiar.');
   }
 };
 
-export const updatePropietario = async (propietarioId, propietarioData) => {
+export const updateFamiliar = async (familiarId, familiarData) => {
   try {
-    // Estructura simplificada para Persona (tipo 'P' se mantiene automáticamente)
+    // Estructura para Familiares con herencia de Persona
     const dataToSend = {
-      nombre: propietarioData.nombre || '',
-      apellido: propietarioData.apellido || '',
-      telefono: propietarioData.telefono || '',
-      imagen: propietarioData.imagen || null,
-      sexo: propietarioData.sexo || '',
-      CI: propietarioData.CI || '',
-      fecha_nacimiento: propietarioData.fecha_nacimiento || '',
-      estado: propietarioData.estado || 'A'
+      // Atributos heredados de Persona
+      nombre: familiarData.nombre || '',
+      apellido: familiarData.apellido || '',
+      telefono: familiarData.telefono || '',
+      imagen: familiarData.imagen || null,
+      sexo: familiarData.sexo || 'M',
+      CI: familiarData.CI || '',
+      fecha_nacimiento: familiarData.fecha_nacimiento || '',
+      estado: familiarData.estado || 'A',
+      // Atributos específicos de Familiares
+      persona_relacionada: familiarData.persona_relacionada || '',
+      parentesco: familiarData.parentesco || ''
     };
     
     // Si hay archivo, usar FormData, si no, usar JSON
@@ -114,7 +132,7 @@ export const updatePropietario = async (propietarioId, propietarioData) => {
         }
       });
 
-      const response = await apiClient.put(`propietarios/${propietarioId}/`, formData, {
+      const response = await apiClient.put(`familiares/${familiarId}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -122,21 +140,21 @@ export const updatePropietario = async (propietarioId, propietarioData) => {
       return response.data;
     } else {
       // Usar JSON para datos sin archivos
-      const response = await apiClient.put(`propietarios/${propietarioId}/`, dataToSend);
+      const response = await apiClient.put(`familiares/${familiarId}/`, dataToSend);
       return response.data;
     }
   } catch (error) {
     if (error.response) {
       throw new Error(JSON.stringify(error.response.data));
     }
-    throw new Error('Error de conexión al actualizar el propietario.');
+    throw new Error('Error de conexión al actualizar el familiar.');
   }
 };
 
-export const deletePropietario = async (propietarioId) => {
+export const deleteFamiliar = async (familiarId) => {
   try {
-    await apiClient.delete(`propietarios/${propietarioId}/`);
+    await apiClient.delete(`familiares/${familiarId}/`);
   } catch (error) {
-    throw new Error('Error al eliminar el propietario.');
+    throw new Error('Error al eliminar el familiar.');
   }
 };

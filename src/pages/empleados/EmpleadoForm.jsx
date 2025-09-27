@@ -5,22 +5,17 @@ import Button from "../../components/button";
 
 const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading }) => {
   const [formData, setFormData] = useState({
-    // Datos de Persona
-    persona: {
-      nombre: "",
-      apellido: "",
-      telefono: "",
-      foto: null,
-      estado: "A",
-      sexo: "",
-      CI: "",
-      fecha_nacimiento: "",
-    },
-    // Datos de Empleado
+    // Campos directos del modelo Empleado (sin anidar en persona)
+    nombre: "",
+    apellido: "",
+    telefono: "",
     direccion: "",
+    sexo: "",
+    CI: "",
+    fecha_nacimiento: "",
+    estado: "A",
     sueldo: "",
-    fecha_salida: null,
-    estado_empleado: "A",
+    imagen: null, // Archivo de imagen
     cargo: "",
   });
 
@@ -28,23 +23,33 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
     if (initialData) {
       console.log('Datos iniciales recibidos en EmpleadoForm:', initialData);
       setFormData({
-        persona: {
-          nombre: initialData.persona?.nombre || "",
-          apellido: initialData.persona?.apellido || "",
-          telefono: initialData.persona?.telefono || "",
-          foto: initialData.persona?.foto || null,
-          estado: initialData.persona?.estado || "A",
-          sexo: initialData.persona?.sexo || "",
-          CI: initialData.persona?.CI || "",
-          fecha_nacimiento: initialData.persona?.fecha_nacimiento ? 
-            initialData.persona.fecha_nacimiento.split('T')[0] : "",
-        },
+        nombre: initialData.nombre || "",
+        apellido: initialData.apellido || "",
+        telefono: initialData.telefono || "",
         direccion: initialData.direccion || "",
+        sexo: initialData.sexo || "",
+        CI: initialData.CI || "",
+        fecha_nacimiento: initialData.fecha_nacimiento ? 
+          initialData.fecha_nacimiento.split('T')[0] : "",
+        estado: initialData.estado || "A",
         sueldo: initialData.sueldo || "",
-        fecha_salida: initialData.fecha_salida ? 
-          initialData.fecha_salida.split('T')[0] : null,
-        estado_empleado: initialData.estado_empleado || "A",
+        imagen: initialData.imagen || null, // URL de imagen existente o null
         cargo: initialData.cargo?.id || initialData.cargo || "",
+      });
+    } else {
+      // Resetear formulario cuando no hay datos iniciales
+      setFormData({
+        nombre: "",
+        apellido: "",
+        telefono: "",
+        direccion: "",
+        sexo: "",
+        CI: "",
+        fecha_nacimiento: "",
+        estado: "A",
+        sueldo: "",
+        imagen: null,
+        cargo: "",
       });
     }
   }, [initialData]);
@@ -52,15 +57,8 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     
-    if (name.startsWith('persona.')) {
-      const personaField = name.split('.')[1];
-      setFormData({
-        ...formData,
-        persona: {
-          ...formData.persona,
-          [personaField]: type === 'file' ? files[0] : value
-        }
-      });
+    if (type === 'file') {
+      setFormData({ ...formData, [name]: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -82,14 +80,14 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
         
           {/* Nombre */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona.nombre">
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="nombre">
               Nombre *
             </label>
             <input
               type="text"
-              id="persona.nombre"
-              name="persona.nombre"
-              value={formData.persona.nombre}
+              id="nombre"
+              name="nombre"
+              value={formData.nombre}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -98,14 +96,14 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
 
           {/* Apellido */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona.apellido">
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="apellido">
               Apellido *
             </label>
             <input
               type="text"
-              id="persona.apellido"
-              name="persona.apellido"
-              value={formData.persona.apellido}
+              id="apellido"
+              name="apellido"
+              value={formData.apellido}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -114,14 +112,14 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
 
           {/* Cédula de Identidad */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona.CI">
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="CI">
               Cédula de Identidad *
             </label>
             <input
               type="text"
-              id="persona.CI"
-              name="persona.CI"
-              value={formData.persona.CI}
+              id="CI"
+              name="CI"
+              value={formData.CI}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -130,14 +128,14 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
 
           {/* Teléfono */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona.telefono">
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="telefono">
               Teléfono
             </label>
             <input
               type="tel"
-              id="persona.telefono"
-              name="persona.telefono"
-              value={formData.persona.telefono}
+              id="telefono"
+              name="telefono"
+              value={formData.telefono}
               onChange={handleChange}
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -145,14 +143,14 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
 
           {/* Fecha de Nacimiento */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona.fecha_nacimiento">
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fecha_nacimiento">
               Fecha de Nacimiento *
             </label>
             <input
               type="date"
-              id="persona.fecha_nacimiento"
-              name="persona.fecha_nacimiento"
-              value={formData.persona.fecha_nacimiento}
+              id="fecha_nacimiento"
+              name="fecha_nacimiento"
+              value={formData.fecha_nacimiento}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -161,13 +159,13 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
 
           {/* Sexo */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona.sexo">
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="sexo">
               Sexo *
             </label>
             <select
-              id="persona.sexo"
-              name="persona.sexo"
-              value={formData.persona.sexo}
+              id="sexo"
+              name="sexo"
+              value={formData.sexo}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -175,42 +173,54 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
               <option value="">Selecciona el sexo</option>
               <option value="M">Masculino</option>
               <option value="F">Femenino</option>
+              <option value="O">Otro</option>
             </select>
           </div>
 
-          {/* Estado de Persona */}
+          {/* Estado */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona.estado">
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="estado">
               Estado
             </label>
             <select
-              id="persona.estado"
-              name="persona.estado"
-              value={formData.persona.estado}
+              id="estado"
+              name="estado"
+              value={formData.estado}
               onChange={handleChange}
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="A">Activo</option>
               <option value="I">Inactivo</option>
+              <option value="S">Suspendido</option>
             </select>
           </div>
 
-          {/* Foto */}
+          {/* Imagen */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona.foto">
-              Foto (Opcional)
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="imagen">
+              Imagen (Opcional)
             </label>
             <input
               type="file"
-              id="persona.foto"
-              name="persona.foto"
+              id="imagen"
+              name="imagen"
               accept="image/*"
               onChange={handleChange}
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <p className="text-xs text-gray-500 mt-1">
-              Selecciona una imagen para el perfil del empleado (opcional)
+              {isEditing ? 'Selecciona una nueva imagen para reemplazar la actual (opcional)' : 'Selecciona una imagen para el perfil del empleado (opcional)'}
             </p>
+            {formData.imagen && typeof formData.imagen === 'string' && (
+              <div className="mt-2">
+                <p className="text-sm text-gray-600">Imagen actual:</p>
+                <img 
+                  src={formData.imagen} 
+                  alt="Imagen actual" 
+                  className="w-20 h-20 object-cover rounded border"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -260,50 +270,17 @@ const EmpleadoForm = ({ onSubmit, onCancel, initialData, cargos = [], loading })
             />
           </div>
 
-          {/* Estado del Empleado */}
-          <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="estado_empleado">
-              Estado del Empleado
-            </label>
-            <select
-              id="estado_empleado"
-              name="estado_empleado"
-              value={formData.estado_empleado}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="A">Activo</option>
-              <option value="I">Inactivo</option>
-              <option value="V">Vacaciones</option>
-              <option value="S">Suspendido</option>
-            </select>
-          </div>
-
-          {/* Fecha de Salida */}
-          <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fecha_salida">
-              Fecha de Salida
-            </label>
-            <input
-              type="date"
-              id="fecha_salida"
-              name="fecha_salida"
-              value={formData.fecha_salida || ""}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
           {/* Dirección */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="direccion">
-              Dirección
+              Dirección *
             </label>
             <textarea
               id="direccion"
               name="direccion"
               value={formData.direccion}
               onChange={handleChange}
+              required
               rows="3"
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />

@@ -38,6 +38,7 @@ const EmpleadoPage = () => {
   }, []);
 
   const handleEdit = (empleado) => {
+    console.log('Empleado seleccionado para editar:', empleado);
     setEditingEmpleado(empleado);
     setShowForm(true);
   };
@@ -54,34 +55,43 @@ const EmpleadoPage = () => {
 
   const handleFormSubmit = async (formData) => {
     try {
-      // Preparar los datos para el backend
+      // Preparar los datos para el backend (estructura plana)
       const cleanedData = {
-        persona: {
-          ...formData.persona
-        },
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        telefono: formData.telefono || null,
         direccion: formData.direccion,
+        sexo: formData.sexo,
+        CI: formData.CI,
+        fecha_nacimiento: formData.fecha_nacimiento,
+        estado: formData.estado,
         sueldo: parseFloat(formData.sueldo),
-        // Solo incluir fecha_salida si tiene valor
-        ...(formData.fecha_salida && { fecha_salida: formData.fecha_salida }),
-        estado_empleado: formData.estado_empleado,
         cargo: parseInt(formData.cargo), // Convertir cargo a número
+        imagen: formData.imagen, // Archivo o URL existente
       };
 
-      // Remover campos null, undefined o vacíos de persona
-      Object.keys(cleanedData.persona).forEach(key => {
-        if (cleanedData.persona[key] === null || 
-            cleanedData.persona[key] === undefined || 
-            cleanedData.persona[key] === '' ||
-            (key === 'foto' && !cleanedData.persona[key])) {
-          delete cleanedData.persona[key];
+      // Remover campos null, undefined o vacíos, excepto imagen que puede ser null
+      Object.keys(cleanedData).forEach(key => {
+        if (cleanedData[key] === null || 
+            cleanedData[key] === undefined || 
+            cleanedData[key] === '') {
+          if (key !== 'imagen') {
+            delete cleanedData[key];
+          }
         }
       });
+
+      // Si estamos editando y no hay nueva imagen, mantener la existente
+      if (editingEmpleado && !formData.imagen && editingEmpleado.imagen) {
+        cleanedData.imagen = editingEmpleado.imagen;
+      }
 
       if (editingEmpleado) {
         console.log('Actualizando empleado:', editingEmpleado.id, cleanedData);
         await updateEmpleado(editingEmpleado.id, cleanedData);
         alert('Empleado actualizado correctamente');
       } else {
+        console.log('Creando empleado:', cleanedData);
         await createEmpleado(cleanedData);
         alert('Empleado creado correctamente');
       }

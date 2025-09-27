@@ -1,33 +1,40 @@
-// src/pages/propietarios/PropietarioForm.jsx
+// src/pages/familiares/FamiliarForm.jsx
 import React, { useState, useEffect } from "react";
 import StyledForm from "../../components/form";
 import Button from "../../components/button";
 
-const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
+const FamiliarForm = ({ onSubmit, onCancel, initialData, personas = [], loading }) => {
   const [formData, setFormData] = useState({
+    // Atributos heredados de Persona
     nombre: "",
     apellido: "",
     telefono: "",
     imagen: null,
     estado: "A",
-    sexo: "",
+    sexo: "M",
     CI: "",
     fecha_nacimiento: "",
+    // Atributos específicos de Familiares
+    persona_relacionada: "",
+    parentesco: "",
   });
 
   useEffect(() => {
     if (initialData) {
-      console.log('Datos iniciales recibidos en PropietarioForm:', initialData);
       setFormData({
+        // Atributos heredados de Persona
         nombre: initialData.nombre || "",
         apellido: initialData.apellido || "",
         telefono: initialData.telefono || "",
         imagen: initialData.imagen || null,
         estado: initialData.estado || "A",
-        sexo: initialData.sexo || "",
+        sexo: initialData.sexo || "M",
         CI: initialData.CI || "",
         fecha_nacimiento: initialData.fecha_nacimiento ? 
           initialData.fecha_nacimiento.split('T')[0] : "",
+        // Atributos específicos de Familiares
+        persona_relacionada: initialData.persona_relacionada || "",
+        parentesco: initialData.parentesco || "",
       });
     } else {
       // Resetear formulario cuando no hay datos iniciales
@@ -37,9 +44,11 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
         telefono: "",
         imagen: null,
         estado: "A",
-        sexo: "",
+        sexo: "M",
         CI: "",
         fecha_nacimiento: "",
+        persona_relacionada: "",
+        parentesco: "",
       });
     }
   }, [initialData]);
@@ -61,7 +70,7 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
   const isEditing = !!initialData;
 
   return (
-    <StyledForm title={isEditing ? "Editar Propietario" : "Registrar Propietario"} onSubmit={handleSubmit}>
+    <StyledForm title={isEditing ? "Editar Familiar" : "Registrar Familiar"} onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Información Personal */}
         <div className="space-y-4">
@@ -198,7 +207,7 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <p className="text-xs text-gray-500 mt-1">
-              {isEditing ? 'Selecciona una nueva imagen para reemplazar la actual (opcional)' : 'Selecciona una imagen para el perfil del propietario (opcional)'}
+              {isEditing ? 'Selecciona una nueva imagen para reemplazar la actual (opcional)' : 'Selecciona una imagen para el perfil del familiar (opcional)'}
             </p>
             {formData.imagen && typeof formData.imagen === 'string' && (
               <div className="mt-2">
@@ -210,6 +219,63 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
                 />
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Información de Parentesco */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium text-gray-800 mb-4">Información de Parentesco</h3>
+
+          {/* Persona Relacionada */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="persona_relacionada">
+              Persona Relacionada *
+            </label>
+            <select
+              id="persona_relacionada"
+              name="persona_relacionada"
+              value={formData.persona_relacionada}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Selecciona una persona</option>
+              {personas.map(persona =>
+                persona.id && persona.nombre_completo ? (
+                  <option key={persona.id} value={persona.id}>
+                    {persona.nombre_completo} - {persona.tipo === 'P' ? 'Propietario' : persona.tipo === 'I' ? 'Inquilino' : persona.tipo}
+                  </option>
+                ) : null
+              )}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              Selecciona el propietario o inquilino con quien tiene parentesco
+            </p>
+          </div>
+
+          {/* Parentesco */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="parentesco">
+              Parentesco *
+            </label>
+            <select
+              id="parentesco"
+              name="parentesco"
+              value={formData.parentesco}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Selecciona el parentesco</option>
+              <option value="PADRE">Padre</option>
+              <option value="MADRE">Madre</option>
+              <option value="HIJO">Hijo</option>
+              <option value="HIJA">Hija</option>
+              <option value="HERMANO">Hermano</option>
+              <option value="HERMANA">Hermana</option>
+              <option value="ESPOSO">Esposo</option>
+              <option value="ESPOSA">Esposa</option>
+            </select>
           </div>
         </div>
 
@@ -230,4 +296,4 @@ const PropietarioForm = ({ onSubmit, onCancel, initialData, loading }) => {
   );
 };
 
-export default PropietarioForm;
+export default FamiliarForm;

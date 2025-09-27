@@ -25,13 +25,11 @@ const PropietarioList = ({ propietarios, onEdit, onDelete, onAddNew }) => {
     "Nombre": propietario?.nombre_completo || '',
     "Cédula": propietario?.CI || '',
     "Teléfono": propietario?.telefono || '',
-    "Estado": propietario?.estado_propietario_display || 
-             (propietario?.estado_propietario === 'A' ? 'Activo' : 
-              propietario?.estado_propietario === 'I' ? 'Inactivo' : 
-              propietario?.estado_propietario === 'S' ? 'Suspendido' : 
-              propietario?.estado_propietario === 'P' ? 'Pendiente' : propietario?.estado_propietario || ''),
-    "Fecha Registro": propietario?.fecha_registro_propietario ? 
-                     new Date(propietario.fecha_registro_propietario).toLocaleDateString() : '',
+    "Estado": propietario?.estado === 'A' ? 'Activo' : 
+              propietario?.estado === 'I' ? 'Inactivo' : 
+              propietario?.estado === 'S' ? 'Suspendido' : propietario?.estado || '',
+    "Fecha Registro": propietario?.fecha_registro ? 
+                     new Date(propietario.fecha_registro).toLocaleDateString() : '',
     id: propietario?.id || '',
   }));
 
@@ -60,7 +58,12 @@ const PropietarioList = ({ propietarios, onEdit, onDelete, onAddNew }) => {
           title="Propietarios"
           columns={columns}
           data={tableData}
-          onEdit={(propietario) => onEdit(propietario)}
+          onEdit={(rowData) => {
+            // Buscar el propietario original en la lista filtrada
+            const propietarioOriginal = filteredPropietarios.find(prop => prop.id === rowData.id);
+            console.log('Propietario original encontrado:', propietarioOriginal);
+            onEdit(propietarioOriginal);
+          }}
           onDelete={onDelete}
         />
       </div>
