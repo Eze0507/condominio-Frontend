@@ -14,6 +14,12 @@ import Familiares from "../pages/familiares/FamiliarPage.jsx";
 import Visitantes from "../pages/visitantes/VisitantePage.jsx";
 import Mascotas from "../pages/mascotas/MascotaPage.jsx";
 import Visitas from "../pages/visitas/VisitaPage.jsx";
+import Vehiculos from "../pages/vehiculos/VehiculoPage.jsx";
+import Bloques from "../pages/bloques/BloquePage.jsx";
+import Unidades from "../pages/unidades/UnidadPage.jsx";
+import ReconocimientoVehicular from "../pages/reconocimiento/ReconocimientoPage.jsx";
+
+
 
 
 // Componente para proteger rutas
@@ -45,6 +51,10 @@ const AppRouter = () => {
           <Route path="visitantes" element={<Visitantes />} />
           <Route path="mascotas" element={<Mascotas />} />
           <Route path="visitas" element={<Visitas />} />
+          <Route path="vehiculos" element={<Vehiculos />} />
+          <Route path="bloques" element={<Bloques />} />
+          <Route path="unidades" element={<Unidades />} />
+          <Route path="reconocimiento-vehicular" element={<ReconocimientoVehicular />} />
         </Route>
 
         {/* Redirección por defecto */}

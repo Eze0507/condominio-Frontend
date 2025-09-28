@@ -35,6 +35,20 @@ export const fetchVehiculoById = async (vehiculoId) => {
 
 export const createVehiculo = async (vehiculoData) => {
   try {
+    // Si hay archivo de imagen, enviar como multipart/form-data
+    const hasFile = vehiculoData && vehiculoData.imagen instanceof File;
+    if (hasFile) {
+      const formData = new FormData();
+      Object.entries(vehiculoData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      });
+      const response = await apiClient.post('vehiculos/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return response.data;
+    }
     const response = await apiClient.post('vehiculos/', vehiculoData);
     return response.data;
   } catch (error) {
@@ -47,6 +61,19 @@ export const createVehiculo = async (vehiculoData) => {
 
 export const updateVehiculo = async (vehiculoId, vehiculoData) => {
   try {
+    const hasFile = vehiculoData && vehiculoData.imagen instanceof File;
+    if (hasFile) {
+      const formData = new FormData();
+      Object.entries(vehiculoData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      });
+      const response = await apiClient.put(`vehiculos/${vehiculoId}/`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return response.data;
+    }
     const response = await apiClient.put(`vehiculos/${vehiculoId}/`, vehiculoData);
     return response.data;
   } catch (error) {

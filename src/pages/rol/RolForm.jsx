@@ -58,6 +58,24 @@ const RoleForm = ({ onSubmit, onCancel, initialData, loading }) => {
     }));
   };
 
+  const handleSelectAll = () => {
+    const allPermissionIds = permissions.map(p => p.id);
+    setFormData(prev => ({
+      ...prev,
+      permission_ids: allPermissionIds
+    }));
+  };
+
+  const handleDeselectAll = () => {
+    setFormData(prev => ({
+      ...prev,
+      permission_ids: []
+    }));
+  };
+
+  const isAllSelected = permissions.length > 0 && formData.permission_ids.length === permissions.length;
+  const isSomeSelected = formData.permission_ids.length > 0;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // El backend espera permission_ids, no permissions
@@ -92,9 +110,37 @@ const RoleForm = ({ onSubmit, onCancel, initialData, loading }) => {
 
       {/* Permisos */}
       <div>
-        <label className="block text-sm font-medium mb-2 text-gray-700">
-          Permisos
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Permisos
+          </label>
+          <div className="flex space-x-2">
+            <button
+              type="button"
+              onClick={handleSelectAll}
+              disabled={loadingPermissions || permissions.length === 0}
+              className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Seleccionar Todos
+            </button>
+            <button
+              type="button"
+              onClick={handleDeselectAll}
+              disabled={loadingPermissions || !isSomeSelected}
+              className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Deseleccionar Todos
+            </button>
+          </div>
+        </div>
+        
+        {/* Contador de permisos seleccionados */}
+        {permissions.length > 0 && (
+          <div className="text-xs text-gray-500 mb-2">
+            {formData.permission_ids.length} de {permissions.length} permisos seleccionados
+          </div>
+        )}
+        
         <div className="max-h-60 overflow-y-auto border border-gray-300 rounded-md p-3 bg-gray-50">
           {loadingPermissions ? (
             <div className="text-center text-gray-500">Cargando permisos...</div>
@@ -104,23 +150,46 @@ const RoleForm = ({ onSubmit, onCancel, initialData, loading }) => {
               <p className="text-xs mt-1">Puedes crear el rol sin permisos por ahora.</p>
             </div>
           ) : (
-            permissions.map((permission) => (
-              <div key={permission.id} className="flex items-center mb-2">
+            <>
+              {/* Checkbox maestro */}
+              <div className="flex items-center mb-3 pb-2 border-b border-gray-200">
                 <input
                   type="checkbox"
-                  id={`permission-${permission.id}`}
-                  checked={formData.permission_ids.includes(permission.id)}
-                  onChange={() => handlePermissionChange(permission.id)}
+                  id="select-all-permissions"
+                  checked={isAllSelected}
+                  ref={(input) => {
+                    if (input) input.indeterminate = isSomeSelected && !isAllSelected;
+                  }}
+                  onChange={() => isAllSelected ? handleDeselectAll() : handleSelectAll()}
                   className="mr-2 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                 />
                 <label 
-                  htmlFor={`permission-${permission.id}`}
-                  className="text-sm text-gray-700 cursor-pointer"
+                  htmlFor="select-all-permissions"
+                  className="text-sm font-medium text-gray-800 cursor-pointer"
                 >
-                  {permission.name} ({permission.codename})
+                  Seleccionar/Deseleccionar Todos
                 </label>
               </div>
-            ))
+              
+              {/* Lista de permisos individuales */}
+              {permissions.map((permission) => (
+                <div key={permission.id} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    id={`permission-${permission.id}`}
+                    checked={formData.permission_ids.includes(permission.id)}
+                    onChange={() => handlePermissionChange(permission.id)}
+                    className="mr-2 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  />
+                  <label 
+                    htmlFor={`permission-${permission.id}`}
+                    className="text-sm text-gray-700 cursor-pointer"
+                  >
+                    {permission.name} ({permission.codename})
+                  </label>
+                </div>
+              ))}
+            </>
           )}
         </div>
       </div>
