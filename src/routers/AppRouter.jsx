@@ -47,6 +47,11 @@ const AppRouter = () => {
         
         {/* Ruta pública para el login */}
         <Route path="/login" element={<LoginPage />} />
+        
+        {/* Rutas públicas para pagos */}
+        <Route path="/pago/success" element={<PagoSuccessPage />} />
+        <Route path="/pago/cancel" element={<PagoCancelPage />} />
+        <Route path="/pago/debug" element={<PagoDebugPage />} />
 
         {/* Rutas protegidas del panel de administración */}
         <Route path="/admin" element={<ProtectedRoute />}>
