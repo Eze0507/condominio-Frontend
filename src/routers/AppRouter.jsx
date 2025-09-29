@@ -18,6 +18,13 @@ import Vehiculos from "../pages/vehiculos/VehiculoPage.jsx";
 import Bloques from "../pages/bloques/BloquePage.jsx";
 import Unidades from "../pages/unidades/UnidadPage.jsx";
 import ReconocimientoVehicular from "../pages/reconocimiento/ReconocimientoPage.jsx";
+import Contratos from "../pages/contratos/ContratoPage.jsx";
+import Incidentes from "../pages/incidentes/IncidentePage.jsx";
+import Multas from "../pages/multas/MultaPage.jsx";
+import Expensas from "../pages/expensas/ExpensaPage.jsx";
+import PagoSuccessPage from "../pages/pago/PagoSuccessPage.jsx";
+import PagoCancelPage from "../pages/pago/PagoCancelPage.jsx";
+import PagoDebugPage from "../pages/pago/PagoDebugPage.jsx";
 
 
 
@@ -37,6 +44,11 @@ const AppRouter = () => {
         
         {/* Ruta pública para el login */}
         <Route path="/login" element={<LoginPage />} />
+        
+        {/* Rutas públicas para pagos */}
+        <Route path="/pago/success" element={<PagoSuccessPage />} />
+        <Route path="/pago/cancel" element={<PagoCancelPage />} />
+        <Route path="/pago/debug" element={<PagoDebugPage />} />
 
         {/* Rutas protegidas del panel de administración */}
         <Route path="/admin" element={<ProtectedRoute />}>
@@ -55,6 +67,10 @@ const AppRouter = () => {
           <Route path="bloques" element={<Bloques />} />
           <Route path="unidades" element={<Unidades />} />
           <Route path="reconocimiento-vehicular" element={<ReconocimientoVehicular />} />
+          <Route path="contratos" element={<Contratos />} />
+          <Route path="incidentes" element={<Incidentes />} />
+          <Route path="multas" element={<Multas />} />
+          <Route path="expensas" element={<Expensas />} />
         </Route>
 
         {/* Redirección por defecto */}

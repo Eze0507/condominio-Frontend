@@ -83,8 +83,9 @@ const Sidebar = ({ sidebarOpen }) => {
       key: "finanzas",
       subItems: [
         { name: "Contrato", path: "/admin/contratos" },
+        { name: "Multa", path: "/admin/multas" },
         { name: "Reportes", path: "/admin/reportes" },
-        { name: "Factura", path: "/admin/facturas" },
+        { name: "Expensa", path: "/admin/expensas" },
         { name: "Servicios", path: "/admin/servicios" },
         { name: "Reserva", path: "/admin/reservas" },
         { name: "Areas sociales", path: "/admin/areas-sociales" },

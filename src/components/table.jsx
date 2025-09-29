@@ -2,7 +2,7 @@
 import React from "react";
 import Button from "./button"; // tu componente de botones
 
-const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelete }) => {
+const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelete, customActions }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full table-auto border-collapse">
@@ -28,22 +28,26 @@ const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelet
                   </div>
                 </td>
               ))}
-              <td className="px-3 py-4 whitespace-nowrap text-sm font-medium">
-                <div className="flex space-x-2">
+              <td className="px-3 py-2 whitespace-nowrap text-sm font-medium">
+                <div className="flex space-x-1 flex-wrap gap-1">
+                  {/* Botones por defecto */}
                   <Button 
                     variant="editar" 
                     onClick={() => onEdit(row)}
-                    className="text-xs px-2 py-1"
+                    className="text-xs px-2 py-1 min-w-fit"
                   >
                     Editar
                   </Button>
                   <Button 
                     variant="cancelar" 
                     onClick={() => onDelete(row.id)}
-                    className="text-xs px-2 py-1"
+                    className="text-xs px-2 py-1 min-w-fit"
                   >
                     Eliminar
                   </Button>
+                  
+                  {/* Acciones personalizadas */}
+                  {customActions && customActions(row)}
                 </div>
               </td>
             </tr>
