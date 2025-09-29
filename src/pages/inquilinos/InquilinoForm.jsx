@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import StyledForm from "../../components/form";
 import Button from "../../components/button";
+import { createUser } from "../../api/userApi";
 
 const InquilinoForm = ({ onSubmit, onCancel, initialData, propietarios = [], loading }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const InquilinoForm = ({ onSubmit, onCancel, initialData, propietarios = [], loa
     sexo: "M",
     imagen: null,
     estado: "A",
+    email: "", // Campo para crear usuario
     // Atributos específicos de Inquilino
     propietario: "",
     fecha_inicio: "",
@@ -35,6 +37,7 @@ const InquilinoForm = ({ onSubmit, onCancel, initialData, propietarios = [], loa
         sexo: initialData.sexo || "M",
         imagen: initialData.imagen || null,
         estado: initialData.estado || "A",
+        email: "", // Siempre vacío para no interferir con el formulario
         // Atributos específicos de Inquilino
         propietario: initialData.propietario || "",
         fecha_inicio: initialData.fecha_inicio ? 
@@ -54,6 +57,7 @@ const InquilinoForm = ({ onSubmit, onCancel, initialData, propietarios = [], loa
         sexo: "M",
         imagen: null,
         estado: "A",
+        email: "",
         propietario: "",
         fecha_inicio: "",
         fecha_fin: "",
@@ -80,7 +84,48 @@ const InquilinoForm = ({ onSubmit, onCancel, initialData, propietarios = [], loa
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    // Excluir el campo email del envío al backend
+    const { email, ...dataToSubmit } = formData;
+    onSubmit(dataToSubmit);
+  };
+
+  const handleCreateUser = async () => {
+    if (!formData.email || !formData.nombre || !formData.apellido || !formData.CI || !formData.telefono) {
+      alert('Por favor completa todos los campos requeridos (nombre, apellido, CI, teléfono y email)');
+      return;
+    }
+
+    try {
+      // Generar username: nombre + CI
+      const username = `${formData.nombre}${formData.CI}`;
+      
+      // Generar password: teléfono + primera letra del nombre + primera letra del apellido
+      const password = `${formData.telefono}${formData.nombre.charAt(0).toLowerCase()}${formData.apellido.charAt(0).toLowerCase()}`;
+      
+      // Role ID para Inquilino
+      const role_id = 4;
+
+      const userData = {
+        username,
+        email: formData.email,
+        password,
+        role_id
+      };
+
+      console.log('Creando usuario con datos:', userData);
+      
+      const result = await createUser(userData);
+      console.log('Usuario creado exitosamente:', result);
+      
+      alert('Usuario creado exitosamente');
+      
+      // Limpiar el campo email después de crear el usuario
+      setFormData(prev => ({ ...prev, email: "" }));
+      
+    } catch (error) {
+      console.error('Error al crear usuario:', error);
+      alert('Error al crear usuario: ' + error.message);
+    }
   };
 
   const isEditing = !!initialData;
@@ -153,6 +198,25 @@ const InquilinoForm = ({ onSubmit, onCancel, initialData, propietarios = [], loa
               onChange={handleChange}
               className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
+          </div>
+
+          {/* Email - Solo para crear usuario */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="email">
+              Email (Para crear usuario)
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="ejemplo@correo.com"
+              className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Este campo solo se usa para crear un usuario del sistema
+            </p>
           </div>
 
           {/* Fecha de Nacimiento */}
@@ -311,15 +375,29 @@ const InquilinoForm = ({ onSubmit, onCancel, initialData, propietarios = [], loa
       </div>
 
       {/* Botones */}
-      <div className="flex justify-end space-x-2 pt-4 mt-6 border-t">
-        {onCancel && (
-          <Button variant="cancelar" onClick={onCancel}>
-            Cancelar
-          </Button>
-        )}
-        <Button variant="guardar" type="submit" disabled={loading}>
-          {isEditing ? "Guardar Cambios" : "Guardar"}
+      <div className="flex justify-between items-center pt-4 mt-6 border-t">
+        {/* Botón para crear usuario */}
+        <Button 
+          variant="guardar" 
+          type="button"
+          onClick={handleCreateUser}
+          disabled={loading || !formData.email}
+          className="bg-blue-600 hover:bg-blue-700"
+        >
+          CREAR USUARIO
         </Button>
+        
+        {/* Botones de formulario */}
+        <div className="flex space-x-2">
+          {onCancel && (
+            <Button variant="cancelar" onClick={onCancel}>
+              Cancelar
+            </Button>
+          )}
+          <Button variant="guardar" type="submit" disabled={loading}>
+            {isEditing ? "Guardar Cambios" : "Guardar"}
+          </Button>
+        </div>
       </div>
     </StyledForm>
   );

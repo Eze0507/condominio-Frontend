@@ -18,6 +18,9 @@ import Vehiculos from "../pages/vehiculos/VehiculoPage.jsx";
 import Bloques from "../pages/bloques/BloquePage.jsx";
 import Unidades from "../pages/unidades/UnidadPage.jsx";
 import ReconocimientoVehicular from "../pages/reconocimiento/ReconocimientoPage.jsx";
+import ReconocimientoFacial from "../pages/reconocimiento/ReconocimientoFacialPage.jsx";
+import EnrolarPersona from "../pages/reconocimiento/EnrolarPersonaPage.jsx";
+import DebugEnrolamiento from "../components/DebugEnrolamiento.jsx";
 
 
 
@@ -55,6 +58,9 @@ const AppRouter = () => {
           <Route path="bloques" element={<Bloques />} />
           <Route path="unidades" element={<Unidades />} />
           <Route path="reconocimiento-vehicular" element={<ReconocimientoVehicular />} />
+          <Route path="reconocimiento-facial" element={<ReconocimientoFacial />} />
+          <Route path="enrolar-persona" element={<EnrolarPersona />} />
+          <Route path="debug-enrolamiento" element={<DebugEnrolamiento />} />
         </Route>
 
         {/* Redirección por defecto */}

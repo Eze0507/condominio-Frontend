@@ -8,8 +8,7 @@ Sigue estos pasos para instalar y correr el proyecto en tu máquina local.
    git clone [repository url]
 
 ### 2. Navegar al directorio del proyecto:
-   cd frontend-taller
-
+   cd condominio-Frontend
 ### 3. Instalar las dependencias:
    npm install
 

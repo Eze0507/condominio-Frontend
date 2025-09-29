@@ -39,18 +39,33 @@ export const createEmpleado = async (empleadoData) => {
   try {
     console.log('Datos recibidos para crear empleado:', empleadoData);
     
+    // Estructura para Empleado
+    const dataToSend = {
+      nombre: empleadoData.nombre || '',
+      apellido: empleadoData.apellido || '',
+      telefono: empleadoData.telefono || '',
+      direccion: empleadoData.direccion || '',
+      sexo: empleadoData.sexo || '',
+      CI: empleadoData.CI || '',
+      fecha_nacimiento: empleadoData.fecha_nacimiento || '',
+      estado: empleadoData.estado || 'A',
+      sueldo: empleadoData.sueldo || '',
+      cargo: empleadoData.cargo || '',
+      imagen: empleadoData.imagen || null
+    };
+    
     // Si hay archivo, usar FormData, si no, usar JSON
-    const hasFile = empleadoData.imagen && empleadoData.imagen instanceof File;
+    const hasFile = dataToSend.imagen;
     
     if (hasFile) {
       // Crear FormData para manejar archivos
       const formData = new FormData();
       
-      // Agregar todos los campos directamente (sin anidar en persona)
-      Object.keys(empleadoData).forEach(key => {
-        if (empleadoData[key] !== null && empleadoData[key] !== undefined) {
-          formData.append(key, empleadoData[key]);
-          console.log(`Agregando ${key}:`, empleadoData[key]);
+      // Agregar todos los campos directamente
+      Object.keys(dataToSend).forEach(key => {
+        if (dataToSend[key] !== null && dataToSend[key] !== undefined) {
+          formData.append(key, dataToSend[key]);
+          console.log(`Agregando ${key}:`, dataToSend[key]);
         }
       });
 
@@ -68,8 +83,8 @@ export const createEmpleado = async (empleadoData) => {
       return response.data;
     } else {
       // Usar JSON para datos sin archivos
-      console.log('Enviando como JSON:', empleadoData);
-      const response = await apiClient.post('empleados/', empleadoData);
+      console.log('Enviando como JSON:', dataToSend);
+      const response = await apiClient.post('empleados/', dataToSend);
       return response.data;
     }
   } catch (error) {
@@ -87,18 +102,33 @@ export const updateEmpleado = async (empleadoId, empleadoData) => {
   try {
     console.log('Datos recibidos para actualizar empleado:', empleadoData);
     
+    // Estructura para Empleado
+    const dataToSend = {
+      nombre: empleadoData.nombre || '',
+      apellido: empleadoData.apellido || '',
+      telefono: empleadoData.telefono || '',
+      direccion: empleadoData.direccion || '',
+      sexo: empleadoData.sexo || '',
+      CI: empleadoData.CI || '',
+      fecha_nacimiento: empleadoData.fecha_nacimiento || '',
+      estado: empleadoData.estado || 'A',
+      sueldo: empleadoData.sueldo || '',
+      cargo: empleadoData.cargo || '',
+      imagen: empleadoData.imagen || null
+    };
+    
     // Si hay archivo, usar FormData, si no, usar JSON
-    const hasFile = empleadoData.imagen && empleadoData.imagen instanceof File;
+    const hasFile = dataToSend.imagen;
     
     if (hasFile) {
       // Crear FormData para manejar archivos
       const formData = new FormData();
       
       // Agregar todos los campos directamente
-      Object.keys(empleadoData).forEach(key => {
-        if (empleadoData[key] !== null && empleadoData[key] !== undefined) {
-          formData.append(key, empleadoData[key]);
-          console.log(`Agregando ${key}:`, empleadoData[key]);
+      Object.keys(dataToSend).forEach(key => {
+        if (dataToSend[key] !== null && dataToSend[key] !== undefined) {
+          formData.append(key, dataToSend[key]);
+          console.log(`Agregando ${key}:`, dataToSend[key]);
         }
       });
 
@@ -110,8 +140,8 @@ export const updateEmpleado = async (empleadoId, empleadoData) => {
       return response.data;
     } else {
       // Usar JSON para datos sin archivos
-      console.log('Enviando como JSON:', empleadoData);
-      const response = await apiClient.put(`empleados/${empleadoId}/`, empleadoData);
+      console.log('Enviando como JSON:', dataToSend);
+      const response = await apiClient.put(`empleados/${empleadoId}/`, dataToSend);
       return response.data;
     }
   } catch (error) {

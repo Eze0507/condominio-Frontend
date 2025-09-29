@@ -97,6 +97,7 @@ const Sidebar = ({ sidebarOpen }) => {
       subItems: [
         { name: "Reconocimiento facial", path: "/admin/reconocimiento-facial" },
         { name: "Reconocimiento vehicular", path: "/admin/reconocimiento-vehicular" },
+        { name: "Enrolar persona", path: "/admin/enrolar-persona" },
         { name: "Detectar problemas", path: "/admin/detectar-problemas" },
       ],
     },
