@@ -53,6 +53,7 @@ const EmpleadoPage = () => {
     }
   };
 
+
   const handleFormSubmit = async (formData) => {
     try {
       // Preparar los datos para el backend (estructura plana)
@@ -66,7 +67,7 @@ const EmpleadoPage = () => {
         fecha_nacimiento: formData.fecha_nacimiento,
         estado: formData.estado,
         sueldo: parseFloat(formData.sueldo),
-        cargo: parseInt(formData.cargo), // Convertir cargo a número
+        cargo: formData.cargo, // ID del cargo (se convierte en backend)
         imagen: formData.imagen, // Archivo o URL existente
       };
 
@@ -128,6 +129,7 @@ const EmpleadoPage = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

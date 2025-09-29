@@ -42,6 +42,7 @@ const PropietarioPage = () => {
     }
   };
 
+
   const handleFormSubmit = async (formData) => {
     try {
       // Preparar los datos para el backend (estructura simplificada)
@@ -99,6 +100,7 @@ const PropietarioPage = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

@@ -2,7 +2,7 @@
 import React from "react";
 import Button from "./button"; // tu componente de botones
 
-const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelete, customActions }) => {
+const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelete, onAddPhoto, customActions }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full table-auto border-collapse">
@@ -38,6 +38,16 @@ const CustomTable = ({ title = "Lista", columns = [], data = [], onEdit, onDelet
                   >
                     Editar
                   </Button>
+                  {onAddPhoto && (
+                    <Button 
+                      variant="guardar" 
+                      onClick={() => onAddPhoto(row)}
+                      className="text-xs px-2 py-1"
+                      title="Agregar foto extra para reconocimiento facial"
+                    >
+                      📸 Foto
+                    </Button>
+                  )}
                   <Button 
                     variant="cancelar" 
                     onClick={() => onDelete(row.id)}
